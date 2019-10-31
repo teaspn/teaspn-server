@@ -1,0 +1,8 @@
+#! /bin/bash
+
+
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $SCRIPT_DIR
+docker-compose restart elasticsearch
+docker-compose run teaspn-server python -m teaspn_server.teaspn_server

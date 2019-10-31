@@ -1,0 +1,35 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:7.1.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  elasticsearch-dump:
+    image: taskrabbit/elasticsearch-dump
+    tty: true
+    stdin_open: true
+
+  teaspn-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    command: python -m teaspn_server.teaspn_server
+
+
+volumes:
+  es-data:
+    driver: local
